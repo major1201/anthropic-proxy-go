@@ -1,0 +1,23 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8000
+  },
+  "api_key": "your-proxy-api-key-here",
+  "logging": {
+    "level": "INFO"
+  },
+  "parameter_overrides": {
+    "max_tokens": null,
+    "temperature": null,
+    "top_p": null,
+    "top_k": null
+  },
+  "routes": {
+    "__default__": {
+      "base_url": "https://api.openai.com/v1",
+      "api_key": "your-openai-api-key-here",
+      "model": "gpt-4o"
+    }
+  }
+}

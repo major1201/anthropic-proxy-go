@@ -1,0 +1,12 @@
+services:
+  proxy:
+    build: .
+    container_name: anthropic-proxy-go
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+    restart: unless-stopped
+    environment:
+      - CONFIG_PATH=config/settings.json
