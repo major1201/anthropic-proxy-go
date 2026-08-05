@@ -19,10 +19,10 @@ import (
 
 // MessagesHandler handles /v1/messages requests.
 type MessagesHandler struct {
-	config         *config.Config
-	requestConv    *converter.RequestConverter
-	responseConv   *converter.ResponseConverter
-	openaiClient   *client.OpenAIClient
+	config       *config.Config
+	requestConv  *converter.RequestConverter
+	responseConv *converter.ResponseConverter
+	openaiClient *client.OpenAIClient
 }
 
 // NewMessagesHandler creates a new MessagesHandler.
@@ -231,8 +231,8 @@ func validateRequest(req *models.AnthropicRequest) error {
 		return fmt.Errorf("top_p must be between 0.0 and 1.0")
 	}
 	for _, msg := range req.Messages {
-		if msg.Role != "user" && msg.Role != "assistant" {
-			return fmt.Errorf("message role must be 'user' or 'assistant', got: %s", msg.Role)
+		if msg.Role != "user" && msg.Role != "assistant" && msg.Role != "system" {
+			return fmt.Errorf("message role must be 'user', 'assistant' or 'system', got: %s", msg.Role)
 		}
 	}
 	return nil

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/major1201/anthropic-proxy-go/internal/models"
 	"github.com/pkoukk/tiktoken-go"
 )
 
@@ -124,7 +125,7 @@ func extractMessageText(msg interface{}) []string {
 }
 
 // CountResponseTokens calculates token count for response content blocks.
-func (tc *TokenCounter) CountResponseTokens(contentBlocks interface{}) (int, error) {
+func (tc *TokenCounter) CountResponseTokens(contentBlocks []models.AnthropicContentBlock) (int, error) {
 	encoder, err := tc.getEncoder()
 	if err != nil {
 		return 0, err
@@ -132,24 +133,18 @@ func (tc *TokenCounter) CountResponseTokens(contentBlocks interface{}) (int, err
 
 	var textParts []string
 
-	if blocks, ok := contentBlocks.([]interface{}); ok {
-		for _, block := range blocks {
-			if b, ok := block.(map[string]interface{}); ok {
-				if text, ok := b["text"].(string); ok {
-					textParts = append(textParts, text)
-				}
-				if thinking, ok := b["thinking"].(string); ok {
-					textParts = append(textParts, thinking)
-				}
-				if input, ok := b["input"]; ok {
-					if inputJSON, err := json.Marshal(input); err == nil {
-						textParts = append(textParts, string(inputJSON))
-					}
-				}
-				if name, ok := b["name"].(string); ok {
-					textParts = append(textParts, name)
-				}
-			}
+	for _, block := range contentBlocks {
+		if block.Text != nil {
+			textParts = append(textParts, *block.Text)
+		}
+		if block.Thinking != nil {
+			textParts = append(textParts, *block.Thinking)
+		}
+		if len(block.Input) > 0 {
+			textParts = append(textParts, string(block.Input))
+		}
+		if block.Name != nil {
+			textParts = append(textParts, *block.Name)
 		}
 	}
 

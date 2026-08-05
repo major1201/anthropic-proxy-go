@@ -545,8 +545,8 @@ func processFinishEvent(chunkData map[string]interface{}, state *StreamState, re
 	}
 	if completionTokens == 0 && len(state.AccumulatedContent) > 0 {
 		combinedText := strings.Join(state.AccumulatedContent, "")
-		completionTokens, _ = common.GlobalCounter.CountResponseTokens([]map[string]interface{}{
-			{"text": combinedText},
+		completionTokens, _ = common.GlobalCounter.CountResponseTokens([]models.AnthropicContentBlock{
+			{Type: models.ContentTypeText, Text: &combinedText},
 		})
 	}
 
